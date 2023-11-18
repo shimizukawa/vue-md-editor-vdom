@@ -1,25 +1,22 @@
 # vue-markdown-preview-virtualdom
 
-This template should help get you started developing with Vue 3 in Vite.
+Addressing a problem with the Markdown editor and its preview, where all the elements in the preview are updated each typing.
 
-## Recommended IDE Setup
+- The display by v-html redraws all elements for each character entered.
+- By breaking up the HTML into Vue's VirtualDOM and rendering it, only the change differences on the preview are updated.
+- This eliminates problems such as reloading images and the resulting scrolling misalignment.
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+<details>
+<summary>日本語</summary>
 
-## Type Support for `.vue` Imports in TS
+Markdown エディタとそのプレビューを作るときに、プレビューのエレメントが文字入力ごとに全て更新されてしまう問題の対処。
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin) to make the TypeScript language service aware of `.vue` types.
+- v-htmlによる表示は1文字入力毎に全てのエレメントを再描画します。
+- HTMLをVueのVirtualDOMに分解してレンダリングすることで、プレビュー上の変更差分だけが更新されます。
+- これによって、画像の再ロードや、それに伴うスクロール位置のズレなどの問題を解消できます。
 
-If the standalone TypeScript plugin doesn't feel fast enough to you, Volar has also implemented a [Take Over Mode](https://github.com/johnsoncodehk/volar/discussions/471#discussioncomment-1361669) that is more performant. You can enable it by the following steps:
+</details>
 
-1. Disable the built-in TypeScript Extension
-    1) Run `Extensions: Show Built-in Extensions` from VSCode's command palette
-    2) Find `TypeScript and JavaScript Language Features`, right click and select `Disable (Workspace)`
-2. Reload the VSCode window by running `Developer: Reload Window` from the command palette.
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vitejs.dev/config/).
 
 ## Project Setup
 
