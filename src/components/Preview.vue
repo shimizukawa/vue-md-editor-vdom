@@ -1,12 +1,17 @@
 <script setup lang="ts">
+import MarkdownIt from 'markdown-it'
+
 defineProps<{
   content: string
 }>()
+
+const md = new MarkdownIt('default', {breaks: true, linkify: true});
+const render = (text) => md.render(text);
+
 </script>
 
 <template>
-  <div class="preview">
-    {{ content }}
+  <div class="preview" v-html="render(content)">
   </div>
 </template>
 

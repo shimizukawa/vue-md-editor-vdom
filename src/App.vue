@@ -3,7 +3,13 @@ import { ref } from 'vue'
 import Editor from './components/Editor.vue'
 import Preview from './components/Preview.vue'
 
-const content = ref('# ここにプレビューが表示されます');
+const defaultText = `
+## You're flying, How?
+
+![mican](/mican.jpg)
+`
+
+const content = ref(defaultText);
 
 </script>
 
