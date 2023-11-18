@@ -3,11 +3,17 @@ import { defineComponent, h } from "vue";
 interface VNode {
   type: any;
   props: object;
-  children: (VNode | string)[] | object | null;
+  children: VNodeChild[] | object | null;
   text?: string;
 }
+type VNodeChild = any;
+type VisitorMethod = (node: HTMLElement) => VNode;
+type DepartureMethod = (node: HTMLElement, vNode: VNode) => VNode;
+type VisitorMethods = {
+  [key: string]: VisitorMethod | DepartureMethod;
+};
 
-const capitalize = (str): string => {
+const capitalize = (str: string): string => {
   // text -> Text
   // text-text -> TextText
   return str
@@ -18,7 +24,7 @@ const capitalize = (str): string => {
     .join("");
 };
 
-const getVisitorMethodNames = (node: HTMLElement) => {
+const getVisitorMethodNames = (node: HTMLElement): { visitName: string, departName: string } => {
   let name;
   if (node.nodeType === Node.TEXT_NODE) {
     name = node.nodeName.slice(1);
@@ -43,27 +49,27 @@ export default defineComponent({
   },
 
   setup(props) {
-    const walkNodes = (node: HTMLElement): VNode | string => {
+    const walkNodes = (node: HTMLElement): any => {
       // h()でvNodeを作る時点で子ノードの一覧が必要になるため、以下の順で処理します。
       // 1. visit: vNode作成の基本情報
       // 2. walk in: children作成
       // 3. depart: 後でvNodeの調整が必要な場合の処理
       // 4. h()によるvNode作成
-      let vNode: VNode = null;
+      let vNode: VNode;
 
       const { visitName, departName } = getVisitorMethodNames(node);
 
       // visit
-      if (vmethods[visitName]) {
-        vNode = vmethods[visitName](node);
+      if (visitName in vmethods) {
+        vNode = (vmethods[visitName] as VisitorMethod)(node);
       } else {
-        vNode = vmethods.visitGeneric(node);
+        vNode = (vmethods.visitGeneric as VisitorMethod)(node);
       }
 
       // walk in
-      const children = Array.from(node.childNodes).map(
-        (childNode: HTMLElement) => {
-          return walkNodes(childNode);
+      const children: VNodeChild[] = Array.from(node.childNodes).map(
+        (childNode) => {
+          return walkNodes(childNode as HTMLElement);
         }
       );
       if (children.length > 0) {
@@ -71,8 +77,8 @@ export default defineComponent({
       }
 
       // depart
-      if (vmethods[departName]) {
-        vNode = vmethods[departName](node, vNode);
+      if (departName in vmethods) {
+        vNode = (vmethods[departName] as DepartureMethod)(node, vNode);
       } else {
         vNode = vmethods.departGeneric(node, vNode);
       }
@@ -93,24 +99,24 @@ export default defineComponent({
 
     // walkNodes内で動的なmethod探索を行うため、変数にいれてあります。
     // また、propsにアクセスできるように、setup関数内で定義しています。
-    const vmethods = {
+    const vmethods: VisitorMethods = {
       // text node の場合
       visitText(node: HTMLElement): VNode {
         const vNode: VNode = {
           type: null,
           props: {},
           children: null,
-          text: node.textContent,
+          text: node.textContent || "",
         };
         return vNode;
       },
-      departText(_node, vNode: VNode): VNode {
+      departText(_node: HTMLElement, vNode: VNode): VNode {
         return vNode;
       },
 
       // vNodeを作る一般的な処理
       visitGeneric(node: HTMLElement): VNode {
-        const _props = {};
+        const _props: any = {};
         for (let i = 0; i < node.attributes.length; i++) {
           const attr = node.attributes[i];
           _props[attr.name] = attr.value;

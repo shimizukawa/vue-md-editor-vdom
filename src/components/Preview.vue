@@ -7,7 +7,7 @@ defineProps<{
 }>()
 
 const md = new MarkdownIt('default', {breaks: true, linkify: true});
-const render = (text) => md.render(text);
+const render = (text: string) => md.render(text);
 
 </script>
 
