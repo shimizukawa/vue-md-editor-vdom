@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import MarkdownIt from 'markdown-it'
+import MarkdownRenderer from './MarkdownRenderer'
 
 defineProps<{
   content: string
@@ -11,8 +12,8 @@ const render = (text) => md.render(text);
 </script>
 
 <template>
-  <div class="preview" v-html="render(content)">
-  </div>
+  <!-- <div class="preview" v-html="render(content)" /> -->
+  <MarkdownRenderer class="preview" :content="render(content)" />
 </template>
 
 <style scoped>
