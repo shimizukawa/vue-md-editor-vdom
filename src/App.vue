@@ -1,30 +1,32 @@
 <script setup lang="ts">
-import HelloWorld from './components/HelloWorld.vue'
-import TheWelcome from './components/TheWelcome.vue'
+import { ref } from 'vue'
+import Editor from './components/Editor.vue'
+import Preview from './components/Preview.vue'
+
+const content = ref('# ここにプレビューが表示されます');
+
 </script>
 
 <template>
   <header>
-    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-    </div>
+    <h1 class="green">Markdown Editor</h1>
   </header>
 
   <main>
-    <TheWelcome />
+    <div class="left">
+      <Editor v-model="content" />
+    </div>
+
+    <div class="right">
+      <Preview :content="content" />
+    </div>
   </main>
 </template>
 
 <style scoped>
 header {
   line-height: 1.5;
-}
-
-.logo {
   display: block;
-  margin: 0 auto 2rem;
 }
 
 @media (min-width: 1024px) {
@@ -34,14 +36,32 @@ header {
     padding-right: calc(var(--section-gap) / 2);
   }
 
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
   header .wrapper {
     display: flex;
     place-items: flex-start;
     flex-wrap: wrap;
   }
+}
+
+main {
+  display: flex;
+  flex-wrap: wrap;
+  place-items: center;
+  padding: var(--section-gap);
+}
+
+.left {
+  flex: 1;
+  display: flex;
+  padding: var(--section-gap);
+  width: 49%;
+  min-height: 80vh;
+}
+.right {
+  flex: 1;
+  display: flex;
+  padding: var(--section-gap);
+  width: 49%;
+  min-height: 80vh;
 }
 </style>
