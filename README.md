@@ -17,6 +17,15 @@ Markdown エディタとそのプレビューを作るときに、プレビュ�
 
 </details>
 
+## v-html vs VirtualDom
+
+### v-html
+
+https://github.com/shimizukawa/vue-md-editor-vdom/assets/151623/e6d08c74-ad7c-49e9-8300-ff9fdbbb2493
+
+### VirtualDom
+
+https://github.com/shimizukawa/vue-md-editor-vdom/assets/151623/6a82f0fc-978e-4c0a-a760-ca5d9c4330ab
 
 ## Project Setup
 
