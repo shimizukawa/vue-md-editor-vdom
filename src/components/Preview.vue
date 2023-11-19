@@ -21,5 +21,8 @@ const render = (text: string) => md.render(text);
   border: 1px solid #ccc;
   padding: 1em;
   width: 100%;
+  overflow-y: scroll;
+  line-break: anywhere;
+  word-break: break-all;
 }
 </style>

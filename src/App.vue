@@ -60,14 +60,14 @@ main {
   flex: 1;
   display: flex;
   padding: var(--section-gap);
-  width: 49%;
-  min-height: 80vh;
+  height: 80vh;
+  margin: 0 10px;
 }
 .right {
   flex: 1;
   display: flex;
   padding: var(--section-gap);
-  width: 49%;
-  min-height: 80vh;
+  height: 80vh;
+  margin: 0 10px;
 }
 </style>
