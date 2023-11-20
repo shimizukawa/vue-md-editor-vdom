@@ -22,6 +22,7 @@ Markdown エディタとそのプレビューを作るときに、プレビュ�
 ### v-html
 
 https://github.com/shimizukawa/vue-md-editor-vdom/assets/151623/e6d08c74-ad7c-49e9-8300-ff9fdbbb2493
+(MICAN by @nana_marux / CC BY-NC 4.0 DEED)
 
 ### VirtualDom
 
