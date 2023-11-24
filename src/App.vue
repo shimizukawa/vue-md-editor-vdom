@@ -7,6 +7,15 @@ const defaultText = `
 ## You're flying, How?
 
 ![mican](/mican.jpg)
+
+## Syntax Highlighting
+
+\`\`\`python
+import this
+def add(a, b):
+    return a + b
+print("hello", add(1, 2))
+\`\`\`
 `
 
 const content = ref(defaultText);
