@@ -1,5 +1,7 @@
 # vue-markdown-preview-virtualdom
 
+- blog: [VueでMarkdownのプレビューをVueの仮想DOMで表示する — 清水川Web](https://www.freia.jp/taka/blog/vue-md-editor-vdom/index.html)
+
 Addressing a problem with the Markdown editor and its preview, where all the elements in the preview are updated each typing.
 
 - The display by v-html redraws all elements for each character entered.
