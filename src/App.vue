@@ -11,10 +11,27 @@ const defaultText = `
 ## Syntax Highlighting
 
 \`\`\`python
-import this
-def add(a, b):
-    return a + b
-print("hello", add(1, 2))
+print("You're flying, How?")
+
+import antimican
+
+print("I just typed.")
+\`\`\`
+
+## Mermaid
+
+\`\`\`mermaid
+graph LR
+  import --- antimican
+  antimican-->C[fa:fa-ban Flying]
+  antimican-->D(fa:fa-spinner);
+\`\`\`
+
+\`\`\`mermaid
+sequenceDiagram
+    Someone->>MICAN: You're flying. How?
+    MICAN-->>Someone: I just typed.
+    MICAN-)MICAN: import antimican
 \`\`\`
 `
 

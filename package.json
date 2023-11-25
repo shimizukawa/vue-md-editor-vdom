@@ -12,6 +12,7 @@
   "dependencies": {
     "highlight.js": "^11.9.0",
     "markdown-it": "^13.0.2",
+    "mermaid": "^10.6.1",
     "vue": "^3.3.4"
   },
   "devDependencies": {

@@ -1,4 +1,5 @@
 import { defineComponent, h } from "vue";
+import MarkdownRendererMermaid from "./MarkdownRendererMermaid.vue";
 
 interface VNode {
   type: any;
@@ -129,7 +130,22 @@ export default defineComponent({
         return vNode;
       },
       departGeneric(node: HTMLElement, vNode: VNode): VNode {
+        if (node.classList.contains("mermaid")) {
+          return vmethods.departPreMermaid(node, vNode);
+        }
         return vNode;
+      },
+      departPreMermaid(node: HTMLElement, vNode: VNode): VNode {
+        const index = [...node.parentNode.querySelectorAll(".mermaid")].findIndex((n) => n===node);
+        const newVNode: VNode = {
+          type: MarkdownRendererMermaid,
+          props: {
+            content: node.textContent,
+            index,
+          },
+          children: null,
+        };
+        return newVNode;
       },
     };
 

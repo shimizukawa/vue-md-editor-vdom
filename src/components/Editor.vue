@@ -5,6 +5,7 @@ defineEmits(['update:modelValue'])
 
 <template>
   <div class="editor">
+    Editor
     <textarea
       :value="modelValue"
       @input="$emit('update:modelValue', ($event.target as HTMLTextAreaElement).value)"
