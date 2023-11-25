@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import MarkdownIt from 'markdown-it';
+import type { Mermaid } from 'mermaid';
 import hljs from 'highlight.js';
 import MarkdownRenderer from './MarkdownRenderer';
 import { onMounted, watch, toRefs, nextTick, inject, ref } from 'vue';
 
-const $mermaid = inject('$mermaid')
+const $mermaid = inject('$mermaid') as Mermaid;
 
 const props = defineProps({
   content: {

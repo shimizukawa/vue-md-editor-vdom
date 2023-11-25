@@ -1,7 +1,8 @@
+import type { App as AppType } from 'vue'
 import mermaid from 'mermaid';
 
 export default {
-  install: (app, options) => {
+  install: (app: AppType, options: object) => {
     // mermaid init
     mermaid.initialize({
       startOnLoad: true,

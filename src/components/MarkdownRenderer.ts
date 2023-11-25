@@ -136,7 +136,7 @@ export default defineComponent({
         return vNode;
       },
       departPreMermaid(node: HTMLElement, vNode: VNode): VNode {
-        const index = [...node.parentNode.querySelectorAll(".mermaid")].findIndex((n) => n===node);
+        const index = node.parentNode ? [...node.parentNode.querySelectorAll(".mermaid")].findIndex((n) => n===node) : 0;
         const newVNode: VNode = {
           type: MarkdownRendererMermaid,
           props: {

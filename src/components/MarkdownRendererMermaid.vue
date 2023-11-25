@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { onMounted, watch, toRefs, ref } from 'vue';
 import { inject } from 'vue'
+import type { Mermaid } from 'mermaid';
 
-const $mermaid = inject('$mermaid')
+const $mermaid = inject('$mermaid') as Mermaid;
 
 const props = defineProps({
   content: {
@@ -30,8 +31,9 @@ watch(
 const render = async (code: string) => {
   try {
     await $mermaid.parse(code);
-  } catch ({ message, hash }) {
-    return message;
+  } catch ({ message }: any) {
+    rendered.value = message as string;
+    return;
   }
 
   const { svg } = await $mermaid.render(`mermaid${props.index}`, code);
