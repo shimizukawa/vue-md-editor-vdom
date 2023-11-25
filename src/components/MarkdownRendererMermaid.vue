@@ -16,28 +16,31 @@ const props = defineProps({
   },
 })
 
-const { content } = toRefs(props);
+const { content, index } = toRefs(props);
 const rendered = ref('');
 
 onMounted(() => {
-  render(content.value);
+  render();
 });
 
 watch(
   content,
-  () => render(content.value),
+  () => render(),
 );
 
-const render = async (code: string) => {
+const render = async () => {
+  rendered.value = await renderMermaid(index.value, content.value);
+};
+
+const renderMermaid = async (index: number, code: string): Promise<string> => {
   try {
     await $mermaid.parse(code);
   } catch ({ message }: any) {
-    rendered.value = message as string;
-    return;
+    return message as string;
   }
 
-  const { svg } = await $mermaid.render(`mermaid${props.index}`, code);
-  rendered.value = svg;
+  const { svg } = await $mermaid.render(`mermaid${index}`, code);
+  return svg;
 };
 </script>
 
