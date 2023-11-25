@@ -21,7 +21,7 @@ Markdown エディタとそのプレビューを作るときに、プレビュ�
 
 ## v-html vs VirtualDom
 
-<video src="demo/20231125-demo.mp4" controls></video>
+https://github.com/shimizukawa/vue-md-editor-vdom/assets/151623/d6135056-c133-443f-aad1-4e5bca49316d
 
 ([MICAN by @nana_marux](https://twitter.com/nana_marux/status/1726451529820058108) / CC BY-NC 4.0 DEED)
 
