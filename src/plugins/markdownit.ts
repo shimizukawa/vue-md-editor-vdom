@@ -1,22 +1,12 @@
 import type { App as AppType } from 'vue'
 import MarkdownIt from 'markdown-it';
-import hljs from 'highlight.js';
+import { mdHighlight } from './markdownit-plugins/highlight';
 
 // markdown-it init
 const md = new MarkdownIt('default', {
   breaks: true,
   linkify: true,
-  highlight: function (str, lang) {
-    if (lang === 'mermaid') {
-      return `<pre class="mermaid">${str}</pre>`;
-    } else if (lang && hljs.getLanguage(lang)) {
-      try {
-        return hljs.highlight(str, { language: lang }).value;
-      } catch (__) {}
-    }
-
-    return ''; // use external default escaping
-  }
+  highlight: mdHighlight,
 });
 
 export default {
