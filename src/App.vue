@@ -18,6 +18,12 @@ import antimican
 print("I just typed.")
 \`\`\`
 
+## Issues
+
+- issue #123 wip
+- (#456)
+- Some#789
+
 ## Mermaid
 
 \`\`\`mermaid
