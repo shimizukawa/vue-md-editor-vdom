@@ -51,11 +51,11 @@ const content = ref(defaultText);
   </header>
 
   <main>
-    <div class="left">
+    <div class="flex-1-1">
       <Editor v-model="content" />
     </div>
 
-    <div class="right">
+    <div class="flex-2-2">
       <Preview :content="content" />
     </div>
   </main>
@@ -87,19 +87,16 @@ main {
   place-items: center;
   padding: var(--section-gap);
 }
-
-.left {
-  flex: 1;
-  display: flex;
+main > div {
   padding: var(--section-gap);
-  height: 80vh;
   margin: 0 10px;
+  height: 80vh;
 }
-.right {
-  flex: 1;
-  display: flex;
-  padding: var(--section-gap);
-  height: 80vh;
-  margin: 0 10px;
+
+.flex-1-1 {
+  flex: 1 1 auto;
+}
+.flex-2-2 {
+  flex: 2 2 auto;
 }
 </style>

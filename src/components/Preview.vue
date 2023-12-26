@@ -33,18 +33,28 @@ const render = (text: string) => $md.render(text);
 </script>
 
 <template>
-  <div class="inner-html">
-    innerHTML
-    <div class="preview" v-html="render(content)" />
-  </div>
-  <div class="virtual-dom">
-    Virtual DOM
-    <MarkdownRenderer class="preview" :content="render(content)" />
+  <div class="flex">
+    <div class="virtual-dom">
+      Virtual DOM
+      <MarkdownRenderer class="preview" :content="render(content)" />
+    </div>
+    <div class="inner-html">
+      innerHTML
+      <div class="preview" v-html="render(content)" />
+    </div>
   </div>
 </template>
 
 <style>
 @import 'highlight.js/styles/vs.min.css';
+
+.flex {
+  display: flex;
+}
+.flex > div {
+  flex: 1 1 auto;
+  margin: 0 10px 0 0;
+}
 
 .preview {
   border: 1px solid #ccc;
