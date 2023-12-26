@@ -2,12 +2,10 @@
 import { v4 as uuidv4 } from "uuid";
 import { watch, toRefs, ref } from 'vue';
 
-const props = defineProps({
-  id: {
-    type: String,
-    required: true,
-  },
-})
+type Props = {
+  id: string,
+}
+const props = defineProps<Props>();
 
 const { id } = toRefs(props);
 const issue = ref({url: "", title: ""});

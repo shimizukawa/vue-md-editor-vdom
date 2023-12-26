@@ -5,16 +5,11 @@ import type { Mermaid } from 'mermaid';
 
 const $mermaid = inject('$mermaid') as Mermaid;
 
-const props = defineProps({
-  content: {
-    type: String,
-    required: true,
-  },
-  index: {
-    type: Number,
-    required: true,
-  },
-})
+type Props = {
+  content: string,
+  index: number,
+}
+const props = defineProps<Props>();
 
 const { content, index } = toRefs(props);
 const rendered = ref('');

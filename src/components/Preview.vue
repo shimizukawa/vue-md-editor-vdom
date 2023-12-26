@@ -2,17 +2,15 @@
 import MarkdownIt from 'markdown-it';
 import type { Mermaid } from 'mermaid';
 import MarkdownRenderer from './MarkdownRenderer';
-import { onMounted, watch, toRefs, nextTick, inject, ref } from 'vue';
+import { onMounted, watch, toRefs, nextTick, inject } from 'vue';
 
 const $md = inject('$md') as MarkdownIt;
 const $mermaid = inject('$mermaid') as Mermaid;
 
-const props = defineProps({
-  content: {
-    type: String,
-    required: true,
-  },
-})
+type Props = {
+  content: string,
+}
+const props = defineProps<Props>();
 
 const { content } = toRefs(props);
 
