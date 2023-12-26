@@ -22,7 +22,7 @@ export const mdIssuePlugin = (md: MarkdownIt) => {
     token.attrs = [
       ["class", "issue"],
       ["data-issue", issueKey],
-      ["href", `https://example.com/issues/${issueKey}`]
+      ["href", `#${issueKey}`]
     ];
 
     token = state.push("text", "", 0);

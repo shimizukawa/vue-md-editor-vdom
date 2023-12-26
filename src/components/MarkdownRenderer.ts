@@ -1,5 +1,6 @@
 import { defineComponent, h } from "vue";
 import MarkdownRendererMermaid from "./MarkdownRendererMermaid.vue";
+import MarkdownRendererIssue from "./MarkdownRendererIssue.vue";
 
 interface VNode {
   type: any;
@@ -133,6 +134,9 @@ export default defineComponent({
         if (node.classList.contains("mermaid")) {
           return vmethods.departPreMermaid(node, vNode);
         }
+        else if (node.classList.contains("issue")) {
+          return vmethods.departIssue(node, vNode);
+        }
         return vNode;
       },
       departPreMermaid(node: HTMLElement, vNode: VNode): VNode {
@@ -142,6 +146,16 @@ export default defineComponent({
           props: {
             content: node.textContent,
             index,
+          },
+          children: null,
+        };
+        return newVNode;
+      },
+      departIssue(node: HTMLElement, vNode: VNode): VNode {
+        const newVNode: VNode = {
+          type: MarkdownRendererIssue,
+          props: {
+            id: node.dataset["issue"],
           },
           children: null,
         };
