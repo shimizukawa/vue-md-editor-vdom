@@ -51,6 +51,22 @@ export default defineComponent({
   },
 
   setup(props) {
+    const componentCount: {[key: string]: Record<string, number>} = {};
+
+    const resetCounter = () => {
+      Object.keys(componentCount).forEach((key) => {
+        componentCount[key] = {};
+      })
+    }
+
+    const getNextKey = (type: string, id: string) => {
+        const counter = componentCount[type] ||= {};
+        const count = counter[id] || 0;
+        counter[id] = count + 1;
+        const key = `${type}-${id}-${count}`;
+        return key;
+    }
+
     const walkNodes = (node: HTMLElement): any => {
       // h()でvNodeを作る時点で子ノードの一覧が必要になるため、以下の順で処理します。
       // 1. visit: vNode作成の基本情報
@@ -152,10 +168,14 @@ export default defineComponent({
         return newVNode;
       },
       departIssue(node: HTMLElement, vNode: VNode): VNode {
+        const id = node.dataset["issue"] as string;
+        const key = getNextKey("issue", id);
+
         const newVNode: VNode = {
           type: MarkdownRendererIssue,
           props: {
-            id: node.dataset["issue"],
+            key,
+            id,
           },
           children: null,
         };
@@ -172,6 +192,7 @@ export default defineComponent({
       const outer = document.createElement("div");
       outer.innerHTML = props.content;
 
+      resetCounter()
       return walkNodes(outer);
     };
   },
