@@ -1,12 +1,16 @@
 # vue-markdown-preview-virtualdom
 
-- blog: [VueでMarkdownのプレビューをVueの仮想DOMで表示する — 清水川Web](https://www.freia.jp/taka/blog/vue-md-editor-vdom/index.html)
-
 Addressing a problem with the Markdown editor and its preview, where all the elements in the preview are updated each typing.
 
 - The display by v-html redraws all elements for each character entered.
 - By breaking up the HTML into Vue's VirtualDOM and rendering it, only the change differences on the preview are updated.
 - This eliminates problems such as reloading images and the resulting scrolling misalignment.
+
+Explanation blog entries:
+
+- [VueでMarkdownのプレビューをVueの仮想DOMで表示する — 清水川Web](https://www.freia.jp/taka/blog/vue-md-editor-vdom/index.html)
+- [Vue MarkdownエディタにMermaidを組み込んで仮想DOMでレンダリング — 清水川Web](https://www.freia.jp/taka/blog/vue-md-editor-vdom-mermaid/index.html)
+- [Vue Componentの再利用による意図しない描画を避ける、MD仮想DOM描画の特殊ケース — 清水川Web](https://www.freia.jp/taka/blog/vue-md-editor-vdom-reused/index.html)
 
 <details>
 <summary>日本語</summary>
