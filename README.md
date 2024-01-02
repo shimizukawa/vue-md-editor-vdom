@@ -23,11 +23,15 @@ Markdown エディタとそのプレビューを作るときに、プレビュ�
 
 </details>
 
+## licenses
+
+- MIT License (except bellow files)
+- [MICAN by @nana_marux](https://twitter.com/nana_marux/status/1726451529820058108) / CC BY-NC 4.0 DEED
+- [XKCD Comic #353: Python](https://www.explainxkcd.com/wiki/index.php/353:_Python) / CC BY-NC 2.5 DEED
+
 ## v-html vs VirtualDom
 
 https://github.com/shimizukawa/vue-md-editor-vdom/assets/151623/d6135056-c133-443f-aad1-4e5bca49316d
-
-([MICAN by @nana_marux](https://twitter.com/nana_marux/status/1726451529820058108) / CC BY-NC 4.0 DEED)
 
 ## Project Setup
 

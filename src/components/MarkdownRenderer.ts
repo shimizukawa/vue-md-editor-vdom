@@ -1,6 +1,7 @@
 import { defineComponent, h } from "vue";
 import MarkdownRendererMermaid from "./MarkdownRendererMermaid.vue";
 import MarkdownRendererIssue from "./MarkdownRendererIssue.vue";
+import MarkdownRendererImg from "./MarkdownRendererImg.vue";
 
 interface VNode {
   type: any;
@@ -130,6 +131,12 @@ export default defineComponent({
       },
       departText(_node: HTMLElement, vNode: VNode): VNode {
         return vNode;
+      },
+
+      departImg(node: HTMLElement, vNode: VNode): VNode {
+        const newVNode: VNode = vmethods.departGeneric(node, vNode);
+        newVNode.type = MarkdownRendererImg;
+        return newVNode;
       },
 
       // vNodeを作る一般的な処理
