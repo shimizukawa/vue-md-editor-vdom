@@ -2,6 +2,7 @@ import { defineComponent, h } from "vue";
 import MarkdownRendererMermaid from "./MarkdownRendererMermaid.vue";
 import MarkdownRendererIssue from "./MarkdownRendererIssue.vue";
 import MarkdownRendererImg from "./MarkdownRendererImg.vue";
+import MarkdownRendererBlockLink from "./MarkdownRendererBlockLink.vue";
 
 interface VNode {
   type: any;
@@ -160,6 +161,9 @@ export default defineComponent({
         else if (node.classList.contains("issue")) {
           return vmethods.departIssue(node, vNode);
         }
+        else if (node.classList.contains("block-link")) {
+          return vmethods.departBlockLink(node, vNode);
+        }
         return vNode;
       },
       departPreMermaid(node: HTMLElement, vNode: VNode): VNode {
@@ -183,6 +187,22 @@ export default defineComponent({
           props: {
             key,
             id,
+          },
+          children: null,
+        };
+        return newVNode;
+      },
+      departBlockLink(node: HTMLElement, vNode: VNode): VNode {
+        const url = node.getAttribute("href") as string;
+        const content = node.textContent || "";
+        const key = getNextKey("url", url);
+
+        const newVNode: VNode = {
+          type: MarkdownRendererBlockLink,
+          props: {
+            key,
+            url,
+            content,
           },
           children: null,
         };
