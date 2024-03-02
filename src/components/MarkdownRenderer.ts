@@ -195,12 +195,12 @@ export default defineComponent({
       departBlockLink(node: HTMLElement, vNode: VNode): VNode {
         const url = node.getAttribute("href") as string;
         const content = node.textContent || "";
-        const key = getNextKey("url", url);
+        // const key = getNextKey("url", url);
 
         const newVNode: VNode = {
           type: MarkdownRendererBlockLink,
           props: {
-            key,
+            // key, // specifiying a key creates new components for each urls and invoke request to many incomplete urls because debounce is not working.
             url,
             content,
           },
