@@ -45,6 +45,11 @@ npm install
 npm run dev
 ```
 
+You should invoke proxy process to use block-link rendering feature, 
+```sh
+npm run proxy
+```
+
 ### Type-Check, Compile and Minify for Production
 
 ```sh
