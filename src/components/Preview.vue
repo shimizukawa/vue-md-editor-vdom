@@ -60,7 +60,7 @@ const render = (text: string) => $md.render(text);
   overflow-y: scroll;
   line-break: anywhere;
   word-break: break-all;
-  height: 80vh;
+  height: calc(100vh - 180px);
 }
 
 pre {

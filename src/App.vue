@@ -90,7 +90,7 @@ main {
 main > div {
   padding: var(--section-gap);
   margin: 0 10px;
-  height: 80vh;
+  height: calc(100vh - 140px);
 }
 
 .flex-1-1 {
