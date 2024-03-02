@@ -11,6 +11,7 @@ Explanation blog entries:
 - [VueでMarkdownのプレビューをVueの仮想DOMで表示する — 清水川Web](https://www.freia.jp/taka/blog/vue-md-editor-vdom/index.html)
 - [Vue MarkdownエディタにMermaidを組み込んで仮想DOMでレンダリング — 清水川Web](https://www.freia.jp/taka/blog/vue-md-editor-vdom-mermaid/index.html)
 - [Vue Componentの再利用による意図しない描画を避ける、MD仮想DOM描画の特殊ケース — 清水川Web](https://www.freia.jp/taka/blog/vue-md-editor-vdom-reused/index.html)
+- [markdown-itでlinkをblock要素としてパースするプラグインを作る — 清水川Web](https://www.freia.jp/taka/blog/markdown-it-customize/index.html)
 
 <details>
 <summary>日本語</summary>
