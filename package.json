@@ -15,7 +15,8 @@
     "markdown-it": "^14.0.0",
     "mdurl": "^2.0.0",
     "mermaid": "^10.7.0",
-    "vue": "^3.4.15"
+    "vue": "^3.4.15",
+    "vue-tippy": "^6.4.1"
   },
   "devDependencies": {
     "@tsconfig/node18": "^18.2.2",

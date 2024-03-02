@@ -40,7 +40,16 @@ watch(
 <template>
   <div class="block-link">
     <div class="title">
-      <a :href="url">{{ metadata.title || content }}</a>
+      <a :href="url">
+        {{ metadata.title || content }}
+        <tippy
+          content-tag="div"
+          to="parent"
+          interactive
+        >
+          <iframe v-if="url" :src="url" class="small" />
+        </tippy>
+      </a>
     </div>
     <div>
       <span>{{ metadata.description }}</span>
@@ -61,5 +70,14 @@ div.block-link > div.title {
   font-weight: bold;
   margin: 0.5rem 0;
   border-bottom: 1px solid gray;
+}
+:deep(div.tippy-content) {
+  display: grid;
+}
+iframe.small {
+  transform: scale(0.6); 
+  transform-origin: top left;
+  width: 167%; /* = 1.0/0.6 */
+  height: 162%;
 }
 </style>
