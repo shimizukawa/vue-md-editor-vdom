@@ -2,6 +2,7 @@
 import MarkdownIt from 'markdown-it';
 import type { Mermaid } from 'mermaid';
 import MarkdownRenderer from './MarkdownRenderer';
+import Floating from './Floating.vue';
 import { onMounted, watch, toRefs, nextTick, inject } from 'vue';
 
 const $md = inject('$md') as MarkdownIt;
@@ -34,6 +35,12 @@ const render = (text: string) => $md.render(text);
   <div class="flex">
     <div class="virtual-dom">
       Virtual DOM
+      <button ref="button">
+        Button with floating tooltip
+        <Floating placement="top" target="parent">
+          My Long Tooltip?
+        </Floating>
+      </button>
       <MarkdownRenderer class="preview" :content="render(content)" />
     </div>
     <div class="inner-html">
@@ -71,5 +78,9 @@ pre {
 
 code {
   font-family: inherit;
+}
+
+.inner-html {
+  display: none;
 }
 </style>

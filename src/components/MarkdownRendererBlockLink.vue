@@ -4,6 +4,7 @@
 
 import { useDebounceFn } from '@vueuse/core';
 import { ref, toRefs, watch } from 'vue';
+import Floating from './Floating.vue';
 
 type Props = {
   url: string,
@@ -78,13 +79,9 @@ const parseMetadata = (html: string) => {
       <div class="title">
         <a :href="url">
           {{ metadata.title || content }}
-          <tippy
-            content-tag="div"
-            to="parent"
-            interactive
-          >
+          <Floating placement="top" target="parent">
             <iframe v-if="url" :src="url" class="small" />
-          </tippy>
+          </Floating>
         </a>
       </div>
       <div>
@@ -118,7 +115,7 @@ div.block-link div.title {
   margin: 0.5rem 0;
   border-bottom: 1px solid gray;
 }
-:deep(div.tippy-content) {
+:deep(.floating-content) {
   display: grid;
 }
 iframe.small {
