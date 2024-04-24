@@ -15,7 +15,7 @@ import type { Placement } from '@floating-ui/vue';
 type HTMLElementRef = Ref<HTMLElement>;
 
 type Props = {
-  target: HTMLElementRef | string;
+  to: HTMLElementRef | string;
   placement?: Placement;
 };
 const props = withDefaults(defineProps<Props>(), {
@@ -25,9 +25,9 @@ const props = withDefaults(defineProps<Props>(), {
 const { placement: placementProp } = toRefs(props);
 const floatingRef = ref();
 const targetRef = (
-  typeof props.target === 'string' && props.target === 'parent' ?
+  typeof props.to === 'string' && props.to === 'parent' ?
   useParentElement(floatingRef):
-  props.target as HTMLElementRef
+  props.to as HTMLElementRef
 );
 const tooltipRef = ref();
 const arrowRef = ref();
@@ -91,7 +91,7 @@ const customFloatingStyles = computed(() => {
 </script>
 
 <template>
-  <div ref="floatingRef">
+  <span ref="floatingRef">
     <Teleport to="body">
       <div ref="tooltipRef" class="floating-wrapper" :style="customFloatingStyles">
         <div class="floating-content">
@@ -100,7 +100,7 @@ const customFloatingStyles = computed(() => {
         <div ref="arrowRef" class="floating-arrow" :style="arrowStyles"></div>
       </div>
     </Teleport>
-  </div>
+  </span>
 </template>
 
 <style scoped>
@@ -121,5 +121,8 @@ const customFloatingStyles = computed(() => {
   height: 8px;
   transform: rotate(45deg);
   box-sizing: border-box;
+}
+.floating-content {
+  display: grid;
 }
 </style>

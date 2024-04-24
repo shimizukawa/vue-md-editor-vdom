@@ -37,7 +37,7 @@ const render = (text: string) => $md.render(text);
       Virtual DOM
       <button ref="button">
         Button with floating tooltip
-        <Floating placement="top" target="parent">
+        <Floating placement="top" to="parent">
           My Long Tooltip?
         </Floating>
       </button>
