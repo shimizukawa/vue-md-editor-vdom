@@ -14,12 +14,15 @@ import type { Placement } from '@floating-ui/vue';
 
 type HTMLElementRef = Ref<HTMLElement>;
 
-const props = defineProps<{
-  placement: Placement;
+type Props = {
   target: HTMLElementRef | string;
-}>();
+  placement?: Placement;
+};
+const props = withDefaults(defineProps<Props>(), {
+  placement: 'top',
+});
 
-const { placement } = toRefs(props);
+const { placement: placementProp } = toRefs(props);
 const floatingRef = ref();
 const targetRef = (
   typeof props.target === 'string' && props.target === 'parent' ?
@@ -28,9 +31,9 @@ const targetRef = (
 );
 const tooltipRef = ref();
 const arrowRef = ref();
-const {floatingStyles, middlewareData, update} = useFloating(targetRef, tooltipRef, {
+const {floatingStyles, middlewareData, update, placement} = useFloating(targetRef, tooltipRef, {
   whileElementsMounted: autoUpdate,
-  placement,
+  placement: placementProp,
   middleware: [offset(6), flip(), shift({padding: 5}), arrow({element: arrowRef})],
 });
 const isHovered = useElementHover(targetRef)
@@ -49,36 +52,74 @@ const arrowStyles = computed(() => {
   if (!arrow) {
     return {};
   }
+  const p0 = placement.value.split('-')[0];
+  const staticSide = {
+    top: 'bottom',
+    right: 'left',
+    bottom: 'top',
+    left: 'right',
+  }[p0] as string;
+  const borderWidth = {
+    top: '0 1px 1px 0',
+    right: '0 0 1px 1px',
+    bottom: '1px 0 0 1px',
+    left: '1px 1px 0 0',
+  }[p0] as string;
   return {
-    top: arrow.y !== null ? `${arrow.y}px` : '',
-    left: arrow.y !== null ? `${arrow.x}px` : '',
+    top: arrow.y != null ? `${arrow.y}px` : '',
+    left: arrow.x != null ? `${arrow.x}px` : '',
+    right: '',
+    bottom: '',
+    [staticSide]: '-5px',
+    borderWidth,
+  };
+});
+
+const customFloatingStyles = computed(() => {
+  const p0 = placement.value.split('-')[0];
+  const boxShadow = {
+    top: '0 4px 4px rgba(0, 0, 0, 0.2)',
+    left: '4px 0 4px rgba(0, 0, 0, 0.2)',
+    right: '-4px 0 4px rgba(0, 0, 0, 0.2)',
+    bottom: '0 -4px 4px rgba(0, 0, 0, 0.2)',
+  }[p0];
+  return {
+    ...floatingStyles.value,
+    boxShadow,
   };
 });
 </script>
 
 <template>
   <div ref="floatingRef">
-    <div ref="tooltipRef" class="floating-wrapper" :style="floatingStyles">
-      <div class="floating-content">
-        <slot />
+    <Teleport to="body">
+      <div ref="tooltipRef" class="floating-wrapper" :style="customFloatingStyles">
+        <div class="floating-content">
+          <slot />
+        </div>
+        <div ref="arrowRef" class="floating-arrow" :style="arrowStyles"></div>
       </div>
-      <div ref="arrowRef" class="floating-arrow" :style="arrowStyles"></div>
-    </div>
+    </Teleport>
   </div>
 </template>
 
 <style scoped>
 .floating-wrapper {
-  background-color: black;
-  color: white;
-  padding: 5px;
+  background-color: white;
+  color: black;
+  padding: 7px;
+  border: 1px solid black;
   border-radius: 4px;
+  display: none;
+  z-index: 10000;
 }
 .floating-arrow {
   position: absolute;
-  background-color: black;
+  background-color: white;
+  border: 1px solid black;
   width: 8px;
   height: 8px;
   transform: rotate(45deg);
+  box-sizing: border-box;
 }
 </style>

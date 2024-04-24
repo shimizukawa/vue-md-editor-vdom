@@ -79,7 +79,7 @@ const parseMetadata = (html: string) => {
       <div class="title">
         <a :href="url">
           {{ metadata.title || content }}
-          <Floating placement="top" target="parent">
+          <Floating placement="right-end" target="parent">
             <iframe v-if="url" :src="url" class="small" />
           </Floating>
         </a>
