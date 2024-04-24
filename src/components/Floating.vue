@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch, computed, toRefs } from 'vue';
+import { ref, watch, computed, toRefs, toRaw } from 'vue';
 import type { Ref } from 'vue';
 import { useElementHover, useParentElement } from '@vueuse/core'
 import {
@@ -17,12 +17,14 @@ type HTMLElementRef = Ref<HTMLElement>;
 type Props = {
   to: HTMLElementRef | string;
   placement?: Placement;
+  interactive?: boolean;
 };
 const props = withDefaults(defineProps<Props>(), {
   placement: 'top',
+  interactive: false,
 });
 
-const { placement: placementProp } = toRefs(props);
+const { placement: placementProp, interactive } = toRefs(props);
 const floatingRef = ref();
 const targetRef = (
   typeof props.to === 'string' && props.to === 'parent' ?
@@ -36,14 +38,22 @@ const {floatingStyles, middlewareData, update, placement} = useFloating(targetRe
   placement: placementProp,
   middleware: [offset(6), flip(), shift({padding: 5}), arrow({element: arrowRef})],
 });
-const isHovered = useElementHover(targetRef)
+const isTargetHovered = useElementHover(targetRef, {delayLeave: 100});
+const isTooltipHovered = useElementHover(tooltipRef, {delayLeave: 100});
+const isHovered = computed((): boolean => {
+  if (interactive.value) {
+    return isTargetHovered.value || isTooltipHovered.value;
+  } else {
+    return isTargetHovered.value;
+  }
+});
 
 watch(isHovered, (hover) => {
   if (hover) {
-    tooltipRef.value.style.display = 'block'
+    // tooltipRef.value.style.display = 'block'
     update();
   } else {
-    tooltipRef.value.style.display = 'none'
+    // tooltipRef.value.style.display = 'none'
   }
 })
 
@@ -93,7 +103,7 @@ const customFloatingStyles = computed(() => {
 <template>
   <span ref="floatingRef">
     <Teleport to="body">
-      <div ref="tooltipRef" class="floating-wrapper" :style="customFloatingStyles">
+      <div v-if="isHovered" ref="tooltipRef" class="floating-wrapper" :style="customFloatingStyles">
         <div class="floating-content">
           <slot />
         </div>
@@ -110,7 +120,7 @@ const customFloatingStyles = computed(() => {
   padding: 7px;
   border: 1px solid black;
   border-radius: 4px;
-  display: none;
+  /* display: none; */
   z-index: 10000;
 }
 .floating-arrow {
