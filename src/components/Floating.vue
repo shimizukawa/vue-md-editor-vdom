@@ -18,13 +18,15 @@ type Props = {
   to: HTMLElementRef | string;
   placement?: Placement;
   interactive?: boolean;
+  delay?: number | [number, number];
 };
 const props = withDefaults(defineProps<Props>(), {
   placement: 'top',
   interactive: false,
+  delay: 0,
 });
 
-const { placement: placementProp, interactive } = toRefs(props);
+const { placement: placementProp, interactive, delay } = toRefs(props);
 const floatingRef = ref();
 const targetRef = (
   typeof props.to === 'string' && props.to === 'parent' ?
@@ -38,8 +40,15 @@ const {floatingStyles, middlewareData, update, placement} = useFloating(targetRe
   placement: placementProp,
   middleware: [offset(6), flip(), shift({padding: 5}), arrow({element: arrowRef})],
 });
-const isTargetHovered = useElementHover(targetRef, {delayLeave: 100});
-const isTooltipHovered = useElementHover(tooltipRef, {delayLeave: 100});
+const delayOptions = computed(() => {
+  const [delayEnter, delayLeave] = Array.isArray(delay.value) ? delay.value : [delay.value, delay.value];
+  return {delayEnter, delayLeave};
+});
+const isTargetHovered = useElementHover(targetRef, {
+  delayEnter: delayOptions.value.delayEnter,
+  delayLeave: delayOptions.value.delayLeave + (interactive.value ? 100 : 0),
+});
+const isTooltipHovered = useElementHover(tooltipRef, delayOptions.value);
 const isHovered = computed((): boolean => {
   if (interactive.value) {
     return isTargetHovered.value || isTooltipHovered.value;
@@ -50,10 +59,7 @@ const isHovered = computed((): boolean => {
 
 watch(isHovered, (hover) => {
   if (hover) {
-    // tooltipRef.value.style.display = 'block'
     update();
-  } else {
-    // tooltipRef.value.style.display = 'none'
   }
 })
 
@@ -120,7 +126,6 @@ const customFloatingStyles = computed(() => {
   padding: 7px;
   border: 1px solid black;
   border-radius: 4px;
-  /* display: none; */
   z-index: 10000;
 }
 .floating-arrow {
