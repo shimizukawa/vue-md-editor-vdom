@@ -35,12 +35,16 @@ const render = (text: string) => $md.render(text);
   <div class="flex">
     <div class="virtual-dom">
       Virtual DOM
-      <button ref="button">
-        Button with floating tooltip
-        <Floating placement="top" to="parent">
-          My Long Tooltip?
-        </Floating>
-      </button>
+      <Floating placement="top">
+        <template #default>
+          <button>
+            Button with floating tooltip
+          </button>
+        </template>
+        <template #content>
+          My Long Long Long Long Long Long Long Long Long Long Tooltip
+        </template>
+      </Floating>
       <MarkdownRenderer class="preview" :content="render(content)" />
     </div>
     <div class="inner-html">
