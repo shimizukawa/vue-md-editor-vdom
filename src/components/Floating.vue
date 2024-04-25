@@ -23,6 +23,8 @@
 // - maxWidth: string as css width, default undefined.
 // - theme: string as data-theme, default undefined.
 // - trigger: Ref<boolean> to control the tooltip visibility.
+// - onShow: () => void, callback when the tooltip is shown.
+// - onHide: () => void, callback when the tooltip is hidden.
 //
 // theme
 //
@@ -44,7 +46,10 @@ import { useElementHover } from '@vueuse/core'
 import * as floating from "@floating-ui/vue";
 import type { Placement } from '@floating-ui/vue';
 
-// define props ----
+// interface ----
+
+type OnShowFn = () => void;
+type OnHideFn = () => void;
 
 type Props = {
   placement?: Placement;
@@ -55,6 +60,8 @@ type Props = {
   maxWidth?: string;
   theme?: string;
   trigger?: Ref<boolean>;
+  onShow?: OnShowFn;
+  onHide?: OnHideFn;
 };
 const props = withDefaults(defineProps<Props>(), {
   placement: "top",
@@ -124,9 +131,12 @@ const isTriggered = computed((): boolean => {
   }
 });
 
-watch(isTriggered, (hover) => {
-  if (hover) {
+watch(isTriggered, (show) => {
+  if (show) {
     update();
+    props.onShow?.();
+  } else {
+    props.onHide?.();
   }
 });
 
