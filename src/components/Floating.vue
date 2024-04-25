@@ -19,6 +19,8 @@
 // - interactive: keeping the tooltip open when the user hovers over the tooltip, default false
 // - delay: [delayEnter, delayLeave] for hover, default 0 (means [0, 0])
 // - arrow: boolean, default true
+// - class: string as css class, default undefined.
+// - maxWidth: string as css width, default undefined.
 
 import { ref, watch, computed, toRefs } from 'vue';
 import { useElementHover } from '@vueuse/core'
@@ -32,6 +34,8 @@ type Props = {
   interactive?: boolean;
   delay?: number | [number, number];
   arrow?: boolean;
+  class?: string;
+  maxWidth?: string;
 };
 const props = withDefaults(defineProps<Props>(), {
   placement: "top",
@@ -48,6 +52,8 @@ const {
   interactive,
   delay,
   arrow: arrowProp,
+  class: classProp,
+  maxWidth: maxWidthProp,
 } = toRefs(props);
 
 const targetRef = ref();
@@ -144,6 +150,7 @@ const customFloatingStyles = computed(() => {
   return {
     ...floatingStyles.value,
     boxShadow,
+    maxWidth: maxWidthProp.value,
   };
 });
 </script>
@@ -157,6 +164,7 @@ const customFloatingStyles = computed(() => {
       v-if="isHovered"
       ref="floatingRef"
       class="floating-wrapper"
+      :class="classProp"
       :style="customFloatingStyles"
     >
       <div class="floating-content">

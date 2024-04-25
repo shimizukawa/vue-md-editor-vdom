@@ -35,7 +35,7 @@ const render = (text: string) => $md.render(text);
   <div class="flex">
     <div class="virtual-dom">
       Virtual DOM
-      <Floating placement="top">
+      <Floating placement="top-start" max-width="200px" class="large-font">
         <template #default>
           <button>
             Button with floating tooltip
@@ -86,5 +86,9 @@ code {
 
 .inner-html {
   display: none;
+}
+
+.large-font {
+  font-size: 2em;
 }
 </style>
