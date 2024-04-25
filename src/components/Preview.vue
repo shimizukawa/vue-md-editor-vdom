@@ -35,7 +35,7 @@ const render = (text: string) => $md.render(text);
   <div class="flex">
     <div class="virtual-dom">
       Virtual DOM
-      <Floating placement="top-start" max-width="200px" class="large-font">
+      <Floating placement="top-start" max-width="200px" class="large-font" theme="warning"">
         <template #default>
           <button>
             Button with floating tooltip
@@ -91,4 +91,11 @@ code {
 .large-font {
   font-size: 2em;
 }
+
+.floating-wrapper[data-theme~="warning"] {
+  background-color: yellow;
+  color: red;
+  border-color: red;
+}
+
 </style>

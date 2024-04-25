@@ -21,6 +21,21 @@
 // - arrow: boolean, default true
 // - class: string as css class, default undefined.
 // - maxWidth: string as css width, default undefined.
+// - theme: string as data-theme, default undefined.
+//
+// theme
+//
+// <Floating theme="warning">
+//   ...
+//
+// <style>
+// .floating-wrapper[data-theme~="warning"] {
+//   background-color: yellow;
+//   color: red;
+//   border-color: red;
+// }
+// .floating-arrow[data-theme~="warning"] { ... }
+// .floating-content[data-theme~="warning"] { ... }
 
 import { ref, watch, computed, toRefs } from 'vue';
 import { useElementHover } from '@vueuse/core'
@@ -36,6 +51,7 @@ type Props = {
   arrow?: boolean;
   class?: string;
   maxWidth?: string;
+  theme?: string;
 };
 const props = withDefaults(defineProps<Props>(), {
   placement: "top",
@@ -54,6 +70,7 @@ const {
   arrow: arrowProp,
   class: classProp,
   maxWidth: maxWidthProp,
+  theme: themeProp,
 } = toRefs(props);
 
 const targetRef = ref();
@@ -165,9 +182,10 @@ const customFloatingStyles = computed(() => {
       ref="floatingRef"
       class="floating-wrapper"
       :class="classProp"
+      :data-theme="themeProp"
       :style="customFloatingStyles"
     >
-      <div class="floating-content">
+      <div class="floating-content" :data-theme="themeProp">
         <slot name="content" />
       </div>
       <div
@@ -175,6 +193,7 @@ const customFloatingStyles = computed(() => {
         ref="arrowRef"
         class="floating-arrow"
         :style="arrowStyles"
+        :data-theme="themeProp"
       />
     </div>
   </Teleport>
