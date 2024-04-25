@@ -22,6 +22,7 @@
 // - class: string as css class, default undefined.
 // - maxWidth: string as css width, default undefined.
 // - theme: string as data-theme, default undefined.
+// - trigger: Ref<boolean> to control the tooltip visibility.
 //
 // theme
 //
@@ -38,6 +39,7 @@
 // .floating-content[data-theme~="warning"] { ... }
 
 import { ref, watch, computed, toRefs } from 'vue';
+import type { Ref } from 'vue';
 import { useElementHover } from '@vueuse/core'
 import * as floating from "@floating-ui/vue";
 import type { Placement } from '@floating-ui/vue';
@@ -52,6 +54,7 @@ type Props = {
   class?: string;
   maxWidth?: string;
   theme?: string;
+  trigger?: Ref<boolean>;
 };
 const props = withDefaults(defineProps<Props>(), {
   placement: "top",
@@ -112,15 +115,16 @@ const isTooltipHovered = useElementHover(floatingRef, {
   delayEnter: 0, // keep tooltip open when hovering over the tooltip
   delayLeave: delayOptions.value.delayLeave,
 });
-const isHovered = computed((): boolean => {
+const isTriggered = computed((): boolean => {
+  const triggered = props.trigger?.value ?? isTargetHovered.value;
   if (interactive.value) {
-    return isTargetHovered.value || isTooltipHovered.value;
+    return triggered || isTooltipHovered.value;
   } else {
-    return isTargetHovered.value;
+    return triggered;
   }
 });
 
-watch(isHovered, (hover) => {
+watch(isTriggered, (hover) => {
   if (hover) {
     update();
   }
@@ -178,7 +182,7 @@ const customFloatingStyles = computed(() => {
   </span>
   <Teleport to="body">
     <div
-      v-if="isHovered"
+      v-if="isTriggered"
       ref="floatingRef"
       class="floating-wrapper"
       :class="classProp"
