@@ -21,8 +21,8 @@
 // - arrow: boolean, default true
 // - class: string as css class, default undefined.
 // - maxWidth: string as css width, default undefined.
-// - theme: string as data-theme, default undefined.
-// - trigger: Ref<boolean> to control the tooltip visibility.
+// - theme: string as data-theme, default 'light'.
+// - trigger: boolean to control the tooltip visibility.
 // - onShow: () => void, callback when the tooltip is shown.
 // - onHide: () => void, callback when the tooltip is hidden.
 //
@@ -40,11 +40,10 @@
 // .floating-arrow[data-theme~="warning"] { ... }
 // .floating-content[data-theme~="warning"] { ... }
 
-import { ref, watch, computed, toRefs } from 'vue';
-import type { Ref } from 'vue';
-import { useElementHover } from '@vueuse/core'
+import { ref, watch, computed, toRefs } from "vue";
+import { useElementHover } from "@vueuse/core";
 import * as floating from "@floating-ui/vue";
-import type { Placement } from '@floating-ui/vue';
+import type { Placement } from "@floating-ui/vue";
 
 // interface ----
 
@@ -57,9 +56,9 @@ type Props = {
   delay?: number | [number, number];
   arrow?: boolean;
   class?: string;
-  maxWidth?: string;
+  maxWidth?: number;
   theme?: string;
-  trigger?: Ref<boolean>;
+  trigger?: boolean;
   onShow?: OnShowFn;
   onHide?: OnHideFn;
 };
@@ -68,6 +67,8 @@ const props = withDefaults(defineProps<Props>(), {
   interactive: false,
   delay: 0,
   arrow: true,
+  theme: "light",
+  trigger: undefined,
 });
 const slots = defineSlots();
 
@@ -81,13 +82,14 @@ const {
   class: classProp,
   maxWidth: maxWidthProp,
   theme: themeProp,
+  trigger: triggerRef,
 } = toRefs(props);
 
 const targetRef = ref();
 const floatingRef = ref();
 const arrowRef = ref();
 
-// floating
+// define floating
 
 const {
   floatingStyles,
@@ -112,7 +114,7 @@ const delayOptions = computed(() => {
   return { delayEnter, delayLeave };
 });
 
-// hover states ----
+// define hover states ----
 
 const isTargetHovered = useElementHover(targetRef, {
   delayEnter: delayOptions.value.delayEnter,
@@ -123,7 +125,7 @@ const isTooltipHovered = useElementHover(floatingRef, {
   delayLeave: delayOptions.value.delayLeave,
 });
 const isTriggered = computed((): boolean => {
-  const triggered = props.trigger?.value ?? isTargetHovered.value;
+  const triggered = triggerRef.value ?? isTargetHovered.value;
   if (interactive.value) {
     return triggered || isTooltipHovered.value;
   } else {
@@ -140,48 +142,29 @@ watch(isTriggered, (show) => {
   }
 });
 
-// styles
+// define styles ----
+
+const placed0 = computed(() => {
+  return placed.value.split("-")[0];
+});
 
 const arrowStyles = computed(() => {
   const arrow = middlewareData.value?.arrow;
   if (!arrow || !arrowProp.value) {
     return {};
   }
-  const p0 = placed.value.split("-")[0];
-  const staticSide = {
-    top: "bottom",
-    right: "left",
-    bottom: "top",
-    left: "right",
-  }[p0] as string;
-  const borderWidth = {
-    top: "0 1px 1px 0",
-    right: "0 0 1px 1px",
-    bottom: "1px 0 0 1px",
-    left: "1px 1px 0 0",
-  }[p0] as string;
   return {
     top: arrow.y != null ? `${arrow.y}px` : "",
     left: arrow.x != null ? `${arrow.x}px` : "",
     right: "",
     bottom: "",
-    [staticSide]: "-5px",
-    borderWidth,
   };
 });
 
 const customFloatingStyles = computed(() => {
-  const p0 = placed.value.split("-")[0];
-  const boxShadow = {
-    top: "0 4px 4px rgba(0, 0, 0, 0.2)",
-    left: "4px 0 4px rgba(0, 0, 0, 0.2)",
-    right: "-4px 0 4px rgba(0, 0, 0, 0.2)",
-    bottom: "0 -4px 4px rgba(0, 0, 0, 0.2)",
-  }[p0];
   return {
     ...floatingStyles.value,
-    boxShadow,
-    maxWidth: maxWidthProp.value,
+    maxWidth: `${maxWidthProp.value}px`,
   };
 });
 </script>
@@ -197,6 +180,7 @@ const customFloatingStyles = computed(() => {
       class="floating-wrapper"
       :class="classProp"
       :data-theme="themeProp"
+      :data-placement="placed0"
       :style="customFloatingStyles"
     >
       <div class="floating-content" :data-theme="themeProp">
@@ -206,32 +190,76 @@ const customFloatingStyles = computed(() => {
         v-if="arrowProp"
         ref="arrowRef"
         class="floating-arrow"
-        :style="arrowStyles"
         :data-theme="themeProp"
+        :style="arrowStyles"
       />
     </div>
   </Teleport>
 </template>
 
-<style scoped>
+<style>
+/* Want to use global scope css, so not using `scoped`.
+ * And I want to define it near the component implementation instead of external css file.
+ */
+
 .floating-wrapper {
   background-color: white;
-  color: black;
   border: 1px solid black;
-  border-radius: 4px;
+  border-radius: 3px;
   padding: 7px;
   z-index: 10000;
+
+  .floating-content {
+    display: grid;
+  }
+
+  .floating-arrow {
+    position: absolute;
+    background-color: white;
+    border: 0px solid black;
+    width: 8px;
+    height: 8px;
+    transform: rotate(45deg);
+    box-sizing: border-box;
+  }
 }
-.floating-arrow {
-  position: absolute;
+
+.floating-wrapper[data-theme~="light"] {
   background-color: white;
   border: 1px solid black;
-  width: 8px;
-  height: 8px;
-  transform: rotate(45deg);
-  box-sizing: border-box;
+
+  .floating-arrow {
+    background-color: white;
+    border: 0px solid black;
+  }
 }
-.floating-content {
-  display: grid;
+
+.floating-wrapper[data-placement~="top"] {
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.2);
+  .floating-arrow {
+    border-width: 0 1px 1px 0;
+    bottom: -5px !important;
+  }
+}
+.floating-wrapper[data-placement~="right"] {
+  box-shadow: -4px 0 4px rgba(0, 0, 0, 0.2);
+  .floating-arrow {
+    border-width: 0 0 1px 1px;
+    left: -5px !important;
+  }
+}
+.floating-wrapper[data-placement~="bottom"] {
+  box-shadow: 0 -4px 4px rgba(0, 0, 0, 0.2);
+  .floating-arrow {
+    border-width: 1px 0 0 1px;
+    top: -5px !important;
+  }
+}
+.floating-wrapper[data-placement~="left"] {
+  box-shadow: 4px 0 4px rgba(0, 0, 0, 0.2);
+  .floating-arrow {
+    border-width: 1px 1px 0 0;
+    right: -5px !important;
+  }
 }
 </style>
