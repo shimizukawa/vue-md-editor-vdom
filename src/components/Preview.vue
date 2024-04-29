@@ -35,16 +35,26 @@ const render = (text: string) => $md.render(text);
   <div class="flex">
     <div class="virtual-dom">
       Virtual DOM
-      <Floating placement="top-start" max-width="200px" class="large-font" theme="warning"">
-        <template #default>
-          <button>
-            Button with floating tooltip
-          </button>
-        </template>
-        <template #content>
-          My Long Long Long Long Long Long Long Long Long Long Tooltip
-        </template>
-      </Floating>
+      <span class="hover-anchor">
+        <span class="hover-box">
+          <Floating
+            placement="top-start"
+            :max-width="500"
+            class="large-font"
+            theme="warning"
+            :delay="200"
+          >
+            <template #default>
+              <button>
+                ?
+              </button>
+            </template>
+            <template #content>
+              Virtual DOM is a programming concept where an ideal, or "virtual", representation of a UI is kept in memory and synced with the "real" DOM by a library such as React. This process is called reconciliation.
+            </template>
+          </Floating>
+        </span>
+      </span>
       <MarkdownRenderer class="preview" :content="render(content)" />
     </div>
     <div class="inner-html">
@@ -89,13 +99,30 @@ code {
 }
 
 .large-font {
-  font-size: 2em;
+  font-size: 1.5em;
+}
+
+.hover-anchor {
+  position: relative;
+  visibility: hidden;
+  div:hover:has(> .hover-anchor) & {
+    visibility: visible;
+  }
+}
+.hover-box {
+  position: absolute;
+  top: -0.8em;
+  left: 0.3em;
 }
 
 .floating-wrapper[data-theme~="warning"] {
   background-color: yellow;
   color: red;
   border-color: red;
+  .floating-arrow {
+    background-color: yellow;
+    border-color: red;
+  }
 }
 
 </style>
