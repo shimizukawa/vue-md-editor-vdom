@@ -9,7 +9,9 @@
 //     </button>
 //   </template>
 //   <template #content>
-//     My Long Long Long Long Long Long Long Long Long Long Tooltip
+//     <div style="max-width: 300px;">
+//       My Long Long Long Long Long Long Long Long Long Long Tooltip
+//     </div>
 //   </template>
 // </Floating>
 //
@@ -19,8 +21,6 @@
 // - interactive: keeping the tooltip open when the user hovers over the tooltip, default false
 // - delay: [delayEnter, delayLeave] for hover, default 0 (means [0, 0])
 // - arrow: boolean, default true
-// - class: string as css class, default undefined.
-// - maxWidth: string as css width, default undefined.
 // - theme: string as data-theme, default 'light'.
 // - trigger: boolean to control the tooltip visibility.
 // - onShow: () => void, callback when the tooltip is shown.
@@ -55,8 +55,6 @@ type Props = {
   interactive?: boolean;
   delay?: number | [number, number];
   arrow?: boolean;
-  class?: string;
-  maxWidth?: number;
   theme?: string;
   trigger?: boolean;
   onShow?: OnShowFn;
@@ -79,8 +77,6 @@ const {
   interactive,
   delay,
   arrow: arrowProp,
-  class: classProp,
-  maxWidth: maxWidthProp,
   theme: themeProp,
   trigger: triggerRef,
 } = toRefs(props);
@@ -160,28 +156,20 @@ const arrowStyles = computed(() => {
     bottom: "",
   };
 });
-
-const customFloatingStyles = computed(() => {
-  return {
-    ...floatingStyles.value,
-    maxWidth: `${maxWidthProp.value}px`,
-  };
-});
 </script>
 
 <template>
   <span ref="targetRef">
     <slot />
   </span>
-  <Teleport to="body">
+  <Teleport v-if="slots.content" to="body">
     <div
       v-if="isTriggered"
       ref="floatingRef"
       class="floating-wrapper"
-      :class="classProp"
       :data-theme="themeProp"
       :data-placement="placed0"
-      :style="customFloatingStyles"
+      :style="floatingStyles"
     >
       <div class="floating-content" :data-theme="themeProp">
         <slot name="content" />
@@ -206,11 +194,12 @@ const customFloatingStyles = computed(() => {
   background-color: white;
   border: 1px solid black;
   border-radius: 3px;
-  padding: 7px;
   z-index: 10000;
 
   .floating-content {
     display: grid;
+    background-color: white;
+    z-index: 10002;
   }
 
   .floating-arrow {
@@ -221,12 +210,17 @@ const customFloatingStyles = computed(() => {
     height: 8px;
     transform: rotate(45deg);
     box-sizing: border-box;
+    z-index: 10001;
   }
 }
 
 .floating-wrapper[data-theme~="light"] {
   background-color: white;
   border: 1px solid black;
+
+  .floating-content {
+    background-color: white;
+  }
 
   .floating-arrow {
     background-color: white;

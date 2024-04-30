@@ -84,7 +84,9 @@ const parseMetadata = (html: string) => {
             </a>
           </template>
           <template #content>
-            <iframe v-if="url" :src="url" class="small" />
+            <div class="floating-iframe">
+              <iframe v-if="url" :src="url" class="small" />
+            </div>
           </template>
         </Floating>
       </div>
@@ -124,6 +126,7 @@ iframe.small {
   transform-origin: top left;
   width: 167%; /* = 1.0/0.6 */
   height: 162%;
+  border: 0;
 }
 .image {
   justify-content: right;
@@ -131,5 +134,10 @@ iframe.small {
 }
 .image img {
   max-width: 200px;
+}
+.floating-iframe {
+  overflow: hidden;
+  padding: 2px;
+  box-sizing: border-box;
 }
 </style>

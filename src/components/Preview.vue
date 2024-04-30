@@ -39,8 +39,6 @@ const render = (text: string) => $md.render(text);
         <span class="hover-box">
           <Floating
             placement="top-start"
-            :max-width="500"
-            class="large-font"
             theme="warning"
             :delay="200"
           >
@@ -50,7 +48,9 @@ const render = (text: string) => $md.render(text);
               </button>
             </template>
             <template #content>
-              Virtual DOM is a programming concept where an ideal, or "virtual", representation of a UI is kept in memory and synced with the "real" DOM by a library such as React. This process is called reconciliation.
+              <div class="hint">
+                Virtual DOM is a programming concept where an ideal, or "virtual", representation of a UI is kept in memory and synced with the "real" DOM by a library such as React. This process is called reconciliation.
+              </div>
             </template>
           </Floating>
         </span>
@@ -98,8 +98,10 @@ code {
   display: none;
 }
 
-.large-font {
+.hint {
   font-size: 1.5em;
+  max-width: 400px;
+  padding: 6px;
 }
 
 .hover-anchor {
@@ -119,6 +121,9 @@ code {
   background-color: yellow;
   color: red;
   border-color: red;
+  .floating-content {
+    background-color: yellow;
+  }
   .floating-arrow {
     background-color: yellow;
     border-color: red;
