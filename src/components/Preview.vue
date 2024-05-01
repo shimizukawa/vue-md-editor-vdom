@@ -99,7 +99,7 @@ code {
 }
 
 .hint {
-  font-size: 1.5em;
+  font-size: .7em;
   max-width: 400px;
   padding: 6px;
 }
