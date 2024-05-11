@@ -97,7 +97,7 @@ const {
   placement: placementProp,
   middleware: [
     floating.offset(6),
-    floating.flip(),
+    floating.flip({ fallbackAxisSideDirection: "end", crossAxis: false }),
     floating.shift({ padding: 5 }),
     floating.arrow({ element: arrowRef }),
   ],
@@ -122,16 +122,12 @@ const isTooltipHovered = useElementHover(floatingRef, {
 });
 const isTriggered = computed((): boolean => {
   const triggered = triggerRef.value ?? isTargetHovered.value;
-  if (interactive.value) {
-    return triggered || isTooltipHovered.value;
-  } else {
-    return triggered;
-  }
+  const t = triggered || (interactive.value && isTooltipHovered.value);
+  return t;
 });
 
 watch(isTriggered, (show) => {
   if (show) {
-    update();
     props.onShow?.();
   } else {
     props.onHide?.();
@@ -199,6 +195,7 @@ const arrowStyles = computed(() => {
   .floating-content {
     display: grid;
     background-color: white;
+    border-radius: 3px;
     z-index: 10002;
   }
 
@@ -217,6 +214,7 @@ const arrowStyles = computed(() => {
 .floating-wrapper[data-theme~="light"] {
   background-color: white;
   border: 1px solid black;
+  box-shadow: 0 4px 4px rgb(0 0 0 / .2);
 
   .floating-content {
     background-color: white;
@@ -229,28 +227,24 @@ const arrowStyles = computed(() => {
 }
 
 .floating-wrapper[data-placement~="top"] {
-  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.2);
   .floating-arrow {
     border-width: 0 1px 1px 0;
     bottom: -5px !important;
   }
 }
 .floating-wrapper[data-placement~="right"] {
-  box-shadow: -4px 0 4px rgba(0, 0, 0, 0.2);
   .floating-arrow {
     border-width: 0 0 1px 1px;
     left: -5px !important;
   }
 }
 .floating-wrapper[data-placement~="bottom"] {
-  box-shadow: 0 -4px 4px rgba(0, 0, 0, 0.2);
   .floating-arrow {
     border-width: 1px 0 0 1px;
     top: -5px !important;
   }
 }
 .floating-wrapper[data-placement~="left"] {
-  box-shadow: 4px 0 4px rgba(0, 0, 0, 0.2);
   .floating-arrow {
     border-width: 1px 1px 0 0;
     right: -5px !important;
