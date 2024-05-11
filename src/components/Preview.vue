@@ -3,10 +3,12 @@ import MarkdownIt from 'markdown-it';
 import type { Mermaid } from 'mermaid';
 import MarkdownRenderer from './MarkdownRenderer';
 import Floating from './Floating.vue';
-import { onMounted, watch, toRefs, nextTick, inject } from 'vue';
+import TextSelectionMenu from './TextSelectionMenu.vue';
+import { onMounted, watch, toRefs, nextTick, inject, ref } from 'vue';
 
 const $md = inject('$md') as MarkdownIt;
 const $mermaid = inject('$mermaid') as Mermaid;
+const preview = ref();
 
 type Props = {
   content: string,
@@ -55,7 +57,8 @@ const render = (text: string) => $md.render(text);
           </Floating>
         </span>
       </span>
-      <MarkdownRenderer class="preview" :content="render(content)" />
+      <MarkdownRenderer ref="preview" class="preview" :content="render(content)" />
+      <TextSelectionMenu :baseEl="preview" />
     </div>
     <div class="inner-html">
       innerHTML
