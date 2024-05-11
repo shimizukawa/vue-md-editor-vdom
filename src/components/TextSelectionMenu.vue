@@ -41,10 +41,51 @@ const target = computed((): VirtualElement | undefined => {
 </script>
 
 <template>
-  TODO: use target if specified instead of #default slot
   <Floating placement="top" interactive inline :target="target" :trigger="trigger">
     <template #content>
-      ここにメニュー要素を配置
+      <!-- TODO: メニュー要素はpropsで受け取る -->
+      <div class="menu">
+        <div class="menu-item">
+          <button>This is</button>
+        </div>
+        <div class="menu-item">
+          <button>Menu</button>
+        </div>
+        <div class="menu-item">
+          <button>Buttons</button>
+        </div>
+      </div>
     </template>
   </Floating>
 </template>
+
+<style scoped>
+.menu {
+  display: flex;
+  flex-wrap: nowrap;
+}
+
+.menu-item {
+  flex: 0 0 fit-content;
+  z-index: 10003;
+
+  +.menu-item {
+    border-left: 1px solid rgb(0 0 0 / .2);;
+  }
+
+  button {
+    padding: 4px 8px;
+    background-color: white;
+    border: 0;
+
+    &:hover {
+      background-color: rgb(0 0 0 / .1);
+    }
+
+    &:active {
+      /*on press in, make the button look like it's being pushed*/
+      transform: translate(0, 2px);
+    }
+  }
+}
+</style>
