@@ -31,6 +31,7 @@ const target = computed((): VirtualElement | undefined => {
   if (!range) {
     return undefined;
   }
+  // TODO: スクロールに追従する
   const virtualEl = {
     getBoundingClientRect: () => range.getBoundingClientRect(),
     getClientRects: () => range.getClientRects(),
