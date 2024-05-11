@@ -41,9 +41,10 @@
 // .floating-content[data-theme~="warning"] { ... }
 
 import { ref, watch, computed, toRefs } from "vue";
+import type { Ref } from "vue";
 import { useElementHover } from "@vueuse/core";
 import * as floating from "@floating-ui/vue";
-import type { Placement } from "@floating-ui/vue";
+import type { Placement, VirtualElement } from "@floating-ui/vue";
 
 // interface ----
 
@@ -51,8 +52,10 @@ type OnShowFn = () => void;
 type OnHideFn = () => void;
 
 type Props = {
+  target?: HTMLElement | VirtualElement;
   placement?: Placement;
   interactive?: boolean;
+  inline?: boolean;
   delay?: number | [number, number];
   arrow?: boolean;
   theme?: string;
@@ -61,8 +64,10 @@ type Props = {
   onHide?: OnHideFn;
 };
 const props = withDefaults(defineProps<Props>(), {
+  target: undefined,
   placement: "top",
   interactive: false,
+  inline: false,
   delay: 0,
   arrow: true,
   theme: "light",
@@ -73,15 +78,20 @@ const slots = defineSlots();
 // define varibales ----
 
 const {
+  target: targetProp,
   placement: placementProp,
   interactive,
+  inline,
   delay,
   arrow: arrowProp,
   theme: themeProp,
-  trigger: triggerRef,
+  trigger: triggerProp,
 } = toRefs(props);
 
-const targetRef = ref();
+const defaultSlotRef = ref();
+const targetRef = computed((): HTMLElement | VirtualElement =>
+  targetProp.value ?? defaultSlotRef.value
+); // targetRef変数を消せるかも？HMRで動作する？
 const floatingRef = ref();
 const arrowRef = ref();
 
@@ -96,6 +106,7 @@ const {
   whileElementsMounted: floating.autoUpdate,
   placement: placementProp,
   middleware: [
+    ...(inline.value ? [floating.inline()] : []),
     floating.offset(6),
     floating.flip({ fallbackAxisSideDirection: "end", crossAxis: false }),
     floating.shift({ padding: 5 }),
@@ -110,19 +121,24 @@ const delayOptions = computed(() => {
   return { delayEnter, delayLeave };
 });
 
-// define hover states ----
-
-const isTargetHovered = useElementHover(targetRef, {
-  delayEnter: delayOptions.value.delayEnter,
-  delayLeave: delayOptions.value.delayLeave + (interactive.value ? 100 : 0),
+const isUsingDefaultSlot = computed((): boolean => {
+  return !targetProp.value;
 });
+
+// define trigger states ----
+
+const triggerRef = triggerProp.value !== undefined ?
+  triggerProp as Ref<boolean> :
+  useElementHover(defaultSlotRef, {
+    delayEnter: delayOptions.value.delayEnter,
+    delayLeave: delayOptions.value.delayLeave + (interactive.value ? 100 : 0),
+  });
 const isTooltipHovered = useElementHover(floatingRef, {
   delayEnter: 0, // keep tooltip open when hovering over the tooltip
   delayLeave: delayOptions.value.delayLeave,
 });
 const isTriggered = computed((): boolean => {
-  const triggered = triggerRef.value ?? isTargetHovered.value;
-  const t = triggered || (interactive.value && isTooltipHovered.value);
+  const t = triggerRef.value || (interactive.value && isTooltipHovered.value);
   return t;
 });
 
@@ -155,7 +171,7 @@ const arrowStyles = computed(() => {
 </script>
 
 <template>
-  <span ref="targetRef">
+  <span v-if="isUsingDefaultSlot" ref="defaultSlotRef">
     <slot />
   </span>
   <Teleport v-if="slots.content" to="body">
