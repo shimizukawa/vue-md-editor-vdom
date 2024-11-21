@@ -3,7 +3,7 @@ import MarkdownIt from 'markdown-it';
 import type { Mermaid } from 'mermaid';
 import MarkdownRenderer from './MarkdownRenderer';
 import Floating from './Floating.vue';
-import { onMounted, watch, toRefs, nextTick, inject } from 'vue';
+import { onMounted, watch, toRefs, nextTick, inject, ref } from 'vue';
 
 const $md = inject('$md') as MarkdownIt;
 const $mermaid = inject('$mermaid') as Mermaid;
@@ -29,6 +29,19 @@ const mermaidRun = () => {
 }
 
 const render = (text: string) => $md.render(text);
+
+const delayedContent = ref("");
+const onShow = async () => {
+  await new Promise(resolve => setTimeout(resolve, 1000));
+  delayedContent.value = `Virtual DOM is a programming concept where an ideal, or "virtual", representation of a UI is kept in memory and synced with the "real" DOM by a library such as React. This process is called reconciliation.`
+}
+const onHide = () => {
+  delayedContent.value = "";
+};
+// import { useEventListener } from "@vueuse/core";
+// useEventListener("mouseover", (ev) => {
+//   console.log("mouseover", ev.target);
+// });
 </script>
 
 <template>
@@ -38,9 +51,9 @@ const render = (text: string) => $md.render(text);
       <span class="hover-anchor">
         <span class="hover-box">
           <Floating
-            placement="top-start"
-            theme="warning"
-            :delay="200"
+            placement="top"
+            :on-show="onShow"
+            :on-hide="onHide"
           >
             <template #default>
               <button>
@@ -49,7 +62,7 @@ const render = (text: string) => $md.render(text);
             </template>
             <template #content>
               <div class="hint">
-                Virtual DOM is a programming concept where an ideal, or "virtual", representation of a UI is kept in memory and synced with the "real" DOM by a library such as React. This process is called reconciliation.
+                {{ delayedContent || "Loading ..."}}
               </div>
             </template>
           </Floating>
@@ -99,7 +112,6 @@ code {
 }
 
 .hint {
-  font-size: .7em;
   max-width: 400px;
   padding: 6px;
 }

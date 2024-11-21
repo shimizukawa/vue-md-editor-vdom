@@ -123,6 +123,7 @@ const isTooltipHovered = useElementHover(floatingRef, {
 const isTriggered = computed((): boolean => {
   const triggered = triggerRef.value ?? isTargetHovered.value;
   const t = triggered || (interactive.value && isTooltipHovered.value);
+  console.log("isTriggered", t, { triggerRef: triggerRef.value, isTargetHovered: isTargetHovered.value, isTooltipHovered: isTooltipHovered.value })
   return t;
 });
 

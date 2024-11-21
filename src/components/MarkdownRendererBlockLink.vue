@@ -77,7 +77,7 @@ const parseMetadata = (html: string) => {
   <div class="block-link">
     <div class="content">
       <div class="title">
-        <Floating placement="right-end" interactive :delay="[100, 800]">
+        <Floating placement="right-end" interactive :delay="[0, 0]">
           <template #default>
             <a :href="url">
               {{ metadata.title || content }}
@@ -122,11 +122,13 @@ div.block-link div.title {
   border-bottom: 1px solid gray;
 }
 iframe.small {
-  transform: scale(0.6); 
   transform-origin: top left;
-  width: 167%; /* = 1.0/0.6 */
-  height: 162%;
+  /* transform: scale(0.6);  */
+  /* width: 167%; /* = 1.0/0.6 */
+  /* height: 162%; */
   border: 0;
+  width: 100%;
+  height: 300px;
 }
 .image {
   justify-content: right;
@@ -139,5 +141,6 @@ iframe.small {
   overflow: hidden;
   padding: 2px;
   box-sizing: border-box;
+  width: 400px;
 }
 </style>
